@@ -182,13 +182,22 @@ public class LibroDAO {
         ArrayList ListaLibros = new ArrayList();
         Libro l;
         try {
-            sql = "SELECT caratula FROM libro WHERE id_libro = ?";
+            sql = "SELECT caratula, año_publicacion, comentarios, tipo_libro, tipo_pasta, fecha_compra"
+                    + " , precio, num_edicion, 	paginas FROM libro WHERE id_libro = ?";
             pstm = cn.prepareStatement(sql);
             pstm.setInt(1, idLibro);
             rs = pstm.executeQuery();
             if (rs.next()) {
                 l = new Libro();
+                l.setPublicacion(rs.getString("año_publicacion"));
                 l.setCaratula(rs.getBinaryStream("caratula"));
+                l.setComentarios(rs.getString("comentarios"));
+                l.setTipoLibro(rs.getString("tipo_libro"));
+                l.setTipoPasta(rs.getString("tipo_pasta"));
+                l.setFechaCompra(rs.getString("fecha_compra"));
+                l.setPrecio(rs.getInt("precio"));
+                l.setEdicion(rs.getString("num_edicion"));
+                l.setPaginas(rs.getInt("paginas"));
                 ListaLibros.add(l);
             }
         } catch (Exception e) {

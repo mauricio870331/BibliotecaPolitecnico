@@ -14,12 +14,9 @@ import Model.AutorDAO;
 import Model.EditorialDAO;
 import Model.Libro;
 import Model.LibroDAO;
-import Utils.ImagensTabla;
-import Utils.MysqlExporter;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
@@ -30,11 +27,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -43,7 +40,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -62,7 +58,7 @@ public final class LibroController implements ActionListener, MouseListener, Key
     int idUser = 0;
     int pagina = 1;
     String dato = "";
-    Libro l;
+    Libro l = null;
     Principal pr;
     ConfirmarRegistro cr;
     AddComment ac;
@@ -82,6 +78,7 @@ public final class LibroController implements ActionListener, MouseListener, Key
     SimpleDateFormat dfY = new SimpleDateFormat("yyyy");
     SimpleDateFormat dfM = new SimpleDateFormat("MM");
     SimpleDateFormat dfD = new SimpleDateFormat("dd");
+    SimpleDateFormat dfupdate = new SimpleDateFormat("dd-MM-yyyy");
     DateFormat format = DateFormat.getDateInstance();
     boolean importante = false;
     String comentario = "";
@@ -289,7 +286,6 @@ public final class LibroController implements ActionListener, MouseListener, Key
                 return;
             }
             edicion = pr.spnEdicion.getText();
-
             int paginas = 0;
             if (pr.txtPaginas.getValue().equals("")) {
                 JOptionPane.showMessageDialog(null, "Ingrese Cantidad de paginas");
@@ -311,6 +307,7 @@ public final class LibroController implements ActionListener, MouseListener, Key
             l.setIdArea(area);
             l.setIdEditorial(editorial);
             l.setPais(pais);
+            l.setImportante(importante);
             l.setLargo(foto);
             cr.lblTitulo.setText(l.getTitulo());
             cr.lblAutor.setText(autordao.getAutorById(l.getIdAutor()).get(0).getNombre());
@@ -372,6 +369,19 @@ public final class LibroController implements ActionListener, MouseListener, Key
                 pr.cboArea.setSelectedItem(idArea);
                 pr.cboEditorial.setSelectedItem(idEditorial);
                 cr.chkImportante.setSelected(librodao.getImportnte(idLibroUpdate).get(0).isImportante());
+                pr.yearPublicacion.setValue(Integer.parseInt(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPublicacion()));
+                ac.textAComentarios.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios());
+                comentario = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios();
+                pr.cboTipoLibro.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoLibro());
+                pr.cboTipoPasta.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoPasta());
+                pr.spnEdicion.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getEdicion());
+                pr.txtPrecio.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPrecio());
+                pr.txtPaginas.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPaginas());
+                try {
+                    pr.cldFechaCompra.setDate(df.parse(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getFechaCompra()));
+                } catch (ParseException ex) {
+                    System.out.println("error de fecha "+ex);
+                }
                 try {
                     InputStream img = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getCaratula();
                     if (img != null) {
@@ -658,13 +668,11 @@ public final class LibroController implements ActionListener, MouseListener, Key
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == cr.chkImportante) {
             if (cr.chkImportante.isSelected()) {
-                importante = true;
-                l.setImportante(importante);
-                System.out.println("aqui");
+                importante = true;                
+//                System.out.println("aqui");
             } else {
-                importante = false;
-                l.setImportante(importante);
-                System.out.println("no se");
+                importante = false;                
+//                System.out.println("no se");
             }
         }
     }
