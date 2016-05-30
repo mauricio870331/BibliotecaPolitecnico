@@ -65,7 +65,7 @@ public class EditorialDAO {
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                editorial = new Editorial();                
+                editorial = new Editorial();
                 editorial.setNombre(rs.getString("nom_editorial"));
                 ListEditorial.add(editorial);
             }
@@ -123,19 +123,26 @@ public class EditorialDAO {
     public String deleteEditorial(int idEditorial) {
         String responseDelete = null;
         try {
-            sql = "DELETE FROM editorial WHERE id_editorial = ?";
-            pstm = cn.prepareStatement(sql);
-            pstm.setInt(1, idEditorial);
-            int rowDelete = pstm.executeUpdate();
-            if (rowDelete > 0) {
-                responseDelete = "registro eliminado con exito..!";
+            String sqlL = "SELECT * FROM libro WHERE id_editorial = " + idEditorial + "";
+            pstm = cn.prepareStatement(sqlL);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                responseDelete = "La Editorial ya tiene libros asociados\nNo se puede eliminar..";
+            } else {
+                sql = "DELETE FROM editorial WHERE id_editorial = ?";
+                pstm = cn.prepareStatement(sql);
+                pstm.setInt(1, idEditorial);
+                int rowDelete = pstm.executeUpdate();
+                if (rowDelete > 0) {
+                    responseDelete = "registro eliminado con exito..!";
+                }
             }
         } catch (Exception e) {
         }
         return responseDelete;
     }
-    
-     public ArrayList<Editorial> getIdEditorialByNombre(String nombre) {
+
+    public ArrayList<Editorial> getIdEditorialByNombre(String nombre) {
         ArrayList listaEditorial = new ArrayList();
         Editorial editorial;
         try {
@@ -144,7 +151,7 @@ public class EditorialDAO {
             pstm.setString(1, nombre);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                editorial = new Editorial();                
+                editorial = new Editorial();
                 editorial.setIdEditorial(rs.getInt("id_editorial"));
                 listaEditorial.add(editorial);
             }
@@ -155,12 +162,12 @@ public class EditorialDAO {
     }
 
     public boolean existEditorial(String editorial) {
-       boolean existe = false;
+        boolean existe = false;
         try {
-            sql = "SELECT * FROM editorial WHERE nom_editorial = '"+editorial+"' OR nom_editorial LIKE '" + editorial + "%'";
-            pstm = cn.prepareStatement(sql);        
+            sql = "SELECT * FROM editorial WHERE nom_editorial = '" + editorial + "' OR nom_editorial LIKE '" + editorial + "%'";
+            pstm = cn.prepareStatement(sql);
             rs = pstm.executeQuery();
-            if (rs.next()) {                
+            if (rs.next()) {
                 existe = true;
             }
         } catch (Exception e) {

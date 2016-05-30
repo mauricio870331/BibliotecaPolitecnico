@@ -123,12 +123,19 @@ public class AreaDAO {
     public String deleteArea(int idArea) {
         String responseDelete = null;
         try {
-            sql = "DELETE FROM areas WHERE id_area = ?";
-            pstm = cn.prepareStatement(sql);
-            pstm.setInt(1, idArea);
-            int rowDelete = pstm.executeUpdate();
-            if (rowDelete > 0) {
-                responseDelete = "registro eliminado con exito..!";
+            String sqlL = "SELECT * FROM libro WHERE id_area = " + idArea + "";
+            pstm = cn.prepareStatement(sqlL);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                responseDelete = "El Area ya tiene libros asociados\nNo se puede eliminar..";
+            } else {
+                sql = "DELETE FROM areas WHERE id_area = ?";
+                pstm = cn.prepareStatement(sql);
+                pstm.setInt(1, idArea);
+                int rowDelete = pstm.executeUpdate();
+                if (rowDelete > 0) {
+                    responseDelete = "registro eliminado con exito..!";
+                }
             }
         } catch (Exception e) {
         }
@@ -160,7 +167,7 @@ public class AreaDAO {
             sql = "SELECT * FROM areas WHERE area = '" + area + "' OR area LIKE '" + area + "%'";
             pstm = cn.prepareStatement(sql);
             rs = pstm.executeQuery();
-            if (rs.next()) {                
+            if (rs.next()) {
                 existe = true;
             }
         } catch (Exception e) {

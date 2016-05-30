@@ -162,6 +162,7 @@ public final class AutorController extends MouseAdapter implements ActionListene
                     if (rptaDelete != null) {
                         JOptionPane.showMessageDialog(null, rptaDelete);
                         cargarAutor(aa.tbAutor, "");
+                        cargarCboAutor();
                     }
                 }
             } else {

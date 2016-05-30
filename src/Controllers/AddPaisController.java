@@ -158,6 +158,7 @@ public final class AddPaisController extends MouseAdapter implements ActionListe
                     if (rptaDelete != null) {
                         JOptionPane.showMessageDialog(null, rptaDelete);
                         cargarPais(aa.tbPaises, "");
+                        cargarTxtPaises();
                     }
                 }
             } else {

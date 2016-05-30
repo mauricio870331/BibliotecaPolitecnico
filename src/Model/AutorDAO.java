@@ -141,15 +141,22 @@ public class AutorDAO {
     public String deleteAutor(int idAutor) {
         String responseDelete = null;
         try {
-
-            sql = "DELETE FROM autor WHERE id_autor = ?";
-            pstm = cn.prepareStatement(sql);
-            pstm.setInt(1, idAutor);
-            int rowDelete = pstm.executeUpdate();
-            if (rowDelete > 0) {
-                responseDelete = "registro eliminado con exito..!";
+            String sqlL = "SELECT * FROM libro WHERE id_autor = " + idAutor + "";
+            pstm = cn.prepareStatement(sqlL);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                responseDelete = "El Autor ya tiene libros asociados\nNo se puede eliminar..";
+            } else {
+                sql = "DELETE FROM autor WHERE id_autor = ?";
+                pstm = cn.prepareStatement(sql);
+                pstm.setInt(1, idAutor);
+                int rowDelete = pstm.executeUpdate();
+                if (rowDelete > 0) {
+                    responseDelete = "registro eliminado con exito..!";
+                }
             }
         } catch (Exception e) {
+            System.out.println("err" + e);
         }
         return responseDelete;
     }
@@ -157,10 +164,10 @@ public class AutorDAO {
     public boolean existAutor(String autor) {
         boolean existe = false;
         try {
-            sql = "SELECT * FROM autor WHERE nombre_completo = '"+autor+"' OR nombre_completo LIKE '" + autor + "%'";
-            pstm = cn.prepareStatement(sql);        
+            sql = "SELECT * FROM autor WHERE nombre_completo = '" + autor + "' OR nombre_completo LIKE '" + autor + "%'";
+            pstm = cn.prepareStatement(sql);
             rs = pstm.executeQuery();
-            if (rs.next()) {                
+            if (rs.next()) {
                 existe = true;
             }
         } catch (Exception e) {

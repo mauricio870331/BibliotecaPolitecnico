@@ -149,62 +149,6 @@ public final class EditorialController extends MouseAdapter implements ActionLis
 
         }
 
-//        if (e.getSource() == pr.btnRegistrar) {
-//            SimpleDateFormat Año = new SimpleDateFormat("yyyy-MM-dd");
-//            Calendar calendario = Calendar.getInstance();
-//            String FchaHoy = Año.format(m);
-//            int hora, minutos, segundos;
-//            hora = calendario.get(Calendar.HOUR_OF_DAY);
-//            minutos = calendario.get(Calendar.MINUTE);
-//            segundos = calendario.get(Calendar.SECOND);
-//            //String Fechacompleta = FchaHoy + " " + hora + ":" + minutos + ":" + segundos;
-////            String Horacomp = hora + ":" + minutos + ":" + segundos;
-////            String tipo_doc = (String) pr.cboTipoDocAdmin.getSelectedItem();
-//            String idAutor = (String) pr.cboAutor.getSelectedItem();
-//            int autor = 0;
-//            if (!idAutor.equals("-- Seleccione --")) {
-//                String[] idGymSeparated = idAutor.split("-");
-//                autor = Integer.parseInt(idGymSeparated[0].trim());
-//            }
-//            String idEditorial = (String) pr.cboEditorial.getSelectedItem();
-//            int editorial = 0;
-//            if (!idEditorial.equals("-- Seleccione --")) {
-//                String[] idRolSeparated = idEditorial.split("-");
-//                editorial = Integer.parseInt(idRolSeparated[0].trim());
-//            }
-//            String idArea = (String) pr.cboArea.getSelectedItem();
-//            int area = 0;
-//            if (!idArea.equals("-- Seleccione --")) {
-//                String[] idRolSeparated = idArea.split("-");
-//                area = Integer.parseInt(idRolSeparated[0].trim());
-//            }
-////            String documento = pr.txtDoc.getText();
-////            String nombres = pr.txtNombres.getText();
-////            String apellidos = pr.txtApellidos.getText();
-////            String direccion = pr.txtDireccion.getText();
-////            String telefonos = pr.txtTelefonos.getText();
-////            String user = pr.txtUser.getText();
-////            String pass = new String(pr.txtPass.getPassword());
-//            int creadoPor = 0;
-//            if (!pr.lblIdAdminLogin.getText().equals("")) {
-//                creadoPor = Integer.parseInt(pr.lblIdAdminLogin.getText());
-//            }
-//
-////            String rptaRegistro = admDao.create(documento, tipo_doc, direccion, telefonos, nombres, apellidos, user, pass, FchaHoy, creadoPor, opc, idToUpdate, gym, foto, rolU);
-////            if (rptaRegistro != null) {
-////                JOptionPane.showMessageDialog(null, rptaRegistro);
-////                cargarAdmin(pr.tbAdmin, dato, rolU);
-////                if (opc.equals("C")) {
-////                    this.pr.pnCreateAdmin.setVisible(false);                
-////                }
-////                opc = "C";
-////                limpiarForm();
-////            } else if (opc.equals("C")) {
-////                JOptionPane.showMessageDialog(null, "No se pudo crear el Registro");
-////            } else {
-////                JOptionPane.showMessageDialog(null, "No se pudo actualizar el Registro");
-////            }
-//        }
         if (e.getSource() == pr.btnCancelar) {
             limpiarForm();
         }
@@ -230,6 +174,7 @@ public final class EditorialController extends MouseAdapter implements ActionLis
                     if (rptaDelete != null) {
                         JOptionPane.showMessageDialog(null, rptaDelete);
                         cargarEditorial(ae.tbEditorial, "");
+                        cargarCboEditorial();
                     }
                 }
             } else {

@@ -163,6 +163,7 @@ public final class AreaController extends MouseAdapter implements ActionListener
                     if (rptaDelete != null) {
                         JOptionPane.showMessageDialog(null, rptaDelete);
                         cargarArea(aa.tbArea, "");
+                        cargarCboArea();
                     }
                 }
             } else {
