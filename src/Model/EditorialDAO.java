@@ -154,4 +154,19 @@ public class EditorialDAO {
         return listaEditorial;
     }
 
+    public boolean existEditorial(String editorial) {
+       boolean existe = false;
+        try {
+            sql = "SELECT * FROM editorial WHERE nom_editorial = '"+editorial+"' OR nom_editorial LIKE '" + editorial + "%'";
+            pstm = cn.prepareStatement(sql);        
+            rs = pstm.executeQuery();
+            if (rs.next()) {                
+                existe = true;
+            }
+        } catch (Exception e) {
+            System.out.println("error" + e);
+        }
+        return existe;
+    }
+
 }

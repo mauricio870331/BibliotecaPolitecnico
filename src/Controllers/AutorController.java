@@ -11,11 +11,13 @@ import Model.*;
 import App.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +28,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Mauricio
  */
-public final class AutorController implements ActionListener, KeyListener {
+public final class AutorController extends MouseAdapter implements ActionListener, KeyListener {
 
     String dato = "";
     Principal pr;
@@ -45,6 +47,8 @@ public final class AutorController implements ActionListener, KeyListener {
         aa.mnuUpdateAutor.addActionListener(this);
         aa.mnuDeleteAutor.addActionListener(this);
         aa.txtFindAutor.addKeyListener(this);
+        aa.btnCancelarAutor.addActionListener(this);
+        aa.tbAutor.addMouseListener(this);
     }
 
     public void cargarAutor(JTable tbAutor, String dato) {
@@ -55,14 +59,17 @@ public final class AutorController implements ActionListener, KeyListener {
                 return false;
             }
         };
+
         Object[] columna = new Object[3];
         Iterator<Autor> nombreIterator = autordao.getListAutor(dato).iterator();
+
         while (nombreIterator.hasNext()) {
             Autor a = nombreIterator.next();
             columna[0] = a.getIdAutor();
             columna[1] = a.getNombre();
             modelo.addRow(columna);
         }
+
         tbAutor.setModel(modelo);
         TableRowSorter<TableModel> ordenar = new TableRowSorter<>(modelo);
         tbAutor.setRowSorter(ordenar);
@@ -89,10 +96,20 @@ public final class AutorController implements ActionListener, KeyListener {
             aa.setVisible(true);
         }
 
+        if (e.getSource() == aa.btnCancelarAutor) {
+            limpiarForm();
+        }
+
         if (e.getSource() == aa.btnCreateAutor) {
             String autor = aa.txtNomAutor.getText();
             if (autor.equals("")) {
                 JOptionPane.showMessageDialog(null, "Ingrese elnombre del Autor..!");
+                aa.txtNomAutor.requestFocus();
+                return;
+            }
+            if (autordao.existAutor(autor)) {
+                JOptionPane.showMessageDialog(null, "El autor: " + autor + " coincide con uno existente\nNo es necesario crearlo otra vez.\nSi lo desea puede actualizarlo..!");
+                aa.txtNomAutor.setText("");
                 aa.txtNomAutor.requestFocus();
                 return;
             }
@@ -122,67 +139,6 @@ public final class AutorController implements ActionListener, KeyListener {
                 JOptionPane.showMessageDialog(null, "No se pudo actualizar el Registro");
             }
 
-        }
-
-//        if (e.getSource() == pr.btnRegistrar) {
-//            SimpleDateFormat Año = new SimpleDateFormat("yyyy-MM-dd");
-//            Calendar calendario = Calendar.getInstance();
-//            String FchaHoy = Año.format(m);
-//            int hora, minutos, segundos;
-//            hora = calendario.get(Calendar.HOUR_OF_DAY);
-//            minutos = calendario.get(Calendar.MINUTE);
-//            segundos = calendario.get(Calendar.SECOND);
-//            //String Fechacompleta = FchaHoy + " " + hora + ":" + minutos + ":" + segundos;
-////            String Horacomp = hora + ":" + minutos + ":" + segundos;
-////            String tipo_doc = (String) pr.cboTipoDocAdmin.getSelectedItem();
-//            String idAutor = (String) pr.cboAutor.getSelectedItem();
-//            int autor = 0;
-//            if (!idAutor.equals("-- Seleccione --")) {
-//                String[] idGymSeparated = idAutor.split("-");
-//                autor = Integer.parseInt(idGymSeparated[0].trim());
-//            }
-//            String idEditorial = (String) pr.cboEditorial.getSelectedItem();
-//            int editorial = 0;
-//            if (!idEditorial.equals("-- Seleccione --")) {
-//                String[] idRolSeparated = idEditorial.split("-");
-//                editorial = Integer.parseInt(idRolSeparated[0].trim());
-//            }
-//            String idArea = (String) pr.cboArea.getSelectedItem();
-//            int area = 0;
-//            if (!idArea.equals("-- Seleccione --")) {
-//                String[] idRolSeparated = idArea.split("-");
-//                area = Integer.parseInt(idRolSeparated[0].trim());
-//            }
-////            String documento = pr.txtDoc.getText();
-////            String nombres = pr.txtNombres.getText();
-////            String apellidos = pr.txtApellidos.getText();
-////            String direccion = pr.txtDireccion.getText();
-////            String telefonos = pr.txtTelefonos.getText();
-////            String user = pr.txtUser.getText();
-////            String pass = new String(pr.txtPass.getPassword());
-//            int creadoPor = 0;
-//            if (!pr.lblIdAdminLogin.getText().equals("")) {
-//                creadoPor = Integer.parseInt(pr.lblIdAdminLogin.getText());
-//            }
-//
-////            String rptaRegistro = admDao.create(documento, tipo_doc, direccion, telefonos, nombres, apellidos, user, pass, FchaHoy, creadoPor, opc, idToUpdate, gym, foto, rolU);
-////            if (rptaRegistro != null) {
-////                JOptionPane.showMessageDialog(null, rptaRegistro);
-////                cargarAdmin(pr.tbAdmin, dato, rolU);
-////                if (opc.equals("C")) {
-////                    this.pr.pnCreateAdmin.setVisible(false);                
-////                }
-////                opc = "C";
-////                limpiarForm();
-////            } else if (opc.equals("C")) {
-////                JOptionPane.showMessageDialog(null, "No se pudo crear el Registro");
-////            } else {
-////                JOptionPane.showMessageDialog(null, "No se pudo actualizar el Registro");
-////            }
-//        }
-        if (e.getSource() == pr.btnCancelar) {
-
-            limpiarForm();
         }
 
         if (e.getSource() == aa.mnuUpdateAutor) {
@@ -234,11 +190,9 @@ public final class AutorController implements ActionListener, KeyListener {
     }
 
     private void limpiarForm() {
-//        pr.cboArea.setSelectedItem("-- Seleccione --");
-//        pr.cboAutor.setSelectedItem("-- Seleccione --");
-//        pr.cboEditorial.setSelectedItem("-- Seleccione --");
-//        pr.txttitulo.setText("");
         aa.txtNomAutor.setText("");
+        opc = "C";
+
     }
 
     public void setAutor() {
@@ -247,7 +201,21 @@ public final class AutorController implements ActionListener, KeyListener {
             Autor elemento = aut.next();
             pr.cboAutor.setSelectedItem(elemento.getNombre());
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {           
+            int fila = aa.tbAutor.getSelectedRow();
+            if (fila >= 0) {
+                pr.cboAutor.setSelectedItem(aa.tbAutor.getValueAt(fila, 1).toString());
+                aa.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No has seleccionado un registro..!");
+            }
+        }
 
     }
+    
 
 }

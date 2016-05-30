@@ -38,6 +38,7 @@ public class AddArea extends javax.swing.JDialog {
         tbArea = new javax.swing.JTable();
         txtFindArea = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnCancelaArea = new javax.swing.JButton();
 
         mnuUpdateArea.setText("Actualizar");
         popupArea.add(mnuUpdateArea);
@@ -76,6 +77,8 @@ public class AddArea extends javax.swing.JDialog {
 
         jLabel2.setText("Buscar:");
 
+        btnCancelaArea.setText("Cancelar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +93,9 @@ public class AddArea extends javax.swing.JDialog {
                         .addComponent(txtNomArea, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCreateArea)
-                        .addGap(0, 119, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelaArea)
+                        .addGap(0, 38, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -104,7 +109,8 @@ public class AddArea extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNomArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateArea))
+                    .addComponent(btnCreateArea)
+                    .addComponent(btnCancelaArea))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -169,6 +175,7 @@ public class AddArea extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnCancelaArea;
     public javax.swing.JButton btnCreateArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

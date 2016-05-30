@@ -11,6 +11,8 @@ import Model.*;
 import App.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -26,7 +28,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Mauricio
  */
-public final class EditorialController implements ActionListener, KeyListener {
+public final class EditorialController extends MouseAdapter implements ActionListener, KeyListener {
 
     int idToUpdate = 0;
     int id_rol;
@@ -56,6 +58,8 @@ public final class EditorialController implements ActionListener, KeyListener {
         ae.mnuUpdateEditorial.addActionListener(this);
         ae.mnuDeleteEditorial.addActionListener(this);
         ae.txtFindEditorial.addKeyListener(this);
+        ae.btnCreateEditorial.addActionListener(this);
+        ae.tbEditorial.addMouseListener(this);
     }
 
     public void cargarEditorial(JTable tbEditorial, String dato) {
@@ -99,11 +103,21 @@ public final class EditorialController implements ActionListener, KeyListener {
             ae.setLocationRelativeTo(null);
             ae.setVisible(true);
         }
+        
+        if (e.getSource() == ae.btnCancelarEditorial) {
+            limpiarForm();            
+        }
 
         if (e.getSource() == ae.btnCreateEditorial) {
             String editorial = ae.txtNomEditorial.getText();
             if (editorial.equals("")) {
                 JOptionPane.showMessageDialog(null, "Ingrese el nombre de la Editorial..!");
+                ae.txtNomEditorial.requestFocus();
+                return;
+            }
+            if (editorialdao.existEditorial(editorial)) {
+                JOptionPane.showMessageDialog(null, "La editorial: "+editorial+" coincide con una existente\nNo es necesario crearla otra vez.\nSi lo desea puede actualizarla..!");
+                ae.txtNomEditorial.setText("");
                 ae.txtNomEditorial.requestFocus();
                 return;
             }
@@ -244,11 +258,8 @@ public final class EditorialController implements ActionListener, KeyListener {
     }
 
     private void limpiarForm() {
-//        pr.cboArea.setSelectedItem("-- Seleccione --");
-//        pr.cboAutor.setSelectedItem("-- Seleccione --");
-//        pr.cboEditorial.setSelectedItem("-- Seleccione --");
-//        pr.txttitulo.setText("");
         ae.txtNomEditorial.setText("");
+        opc = "C";        
     }
 
     public void setEditorial() {
@@ -257,7 +268,18 @@ public final class EditorialController implements ActionListener, KeyListener {
             Editorial elemento = ed.next();
             pr.cboEditorial.setSelectedItem(elemento.getNombre());
         }
-
+    }
+    
+       public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {           
+            int fila = ae.tbEditorial.getSelectedRow();
+            if (fila >= 0) {
+                pr.cboEditorial.setSelectedItem(ae.tbEditorial.getValueAt(fila, 1).toString());
+                ae.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No has seleccionado un registro..!");
+            }
+        }
     }
 
 }

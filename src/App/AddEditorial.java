@@ -38,6 +38,7 @@ public class AddEditorial extends javax.swing.JDialog {
         tbEditorial = new javax.swing.JTable();
         txtFindEditorial = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnCancelarEditorial = new javax.swing.JButton();
 
         mnuUpdateEditorial.setText("Actualizar");
         popupEditorial.add(mnuUpdateEditorial);
@@ -76,6 +77,8 @@ public class AddEditorial extends javax.swing.JDialog {
 
         jLabel2.setText("Buscar:");
 
+        btnCancelarEditorial.setText("Cancelar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +93,9 @@ public class AddEditorial extends javax.swing.JDialog {
                         .addComponent(txtNomEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCreateEditorial)
-                        .addGap(0, 104, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarEditorial)
+                        .addGap(0, 23, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -104,7 +109,8 @@ public class AddEditorial extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNomEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateEditorial))
+                    .addComponent(btnCreateEditorial)
+                    .addComponent(btnCancelarEditorial))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -169,6 +175,7 @@ public class AddEditorial extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnCancelarEditorial;
     public javax.swing.JButton btnCreateEditorial;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

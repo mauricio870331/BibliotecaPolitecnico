@@ -56,8 +56,6 @@ public class AutorDAO {
         return responseCreate;
     }
 
-    
-
     public ArrayList<Autor> getAutorById(int id) {
         ArrayList listaAutor = new ArrayList();
         Autor autor;
@@ -67,7 +65,7 @@ public class AutorDAO {
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                autor = new Autor();                
+                autor = new Autor();
                 autor.setNombre(rs.getString("nombre_completo"));
                 listaAutor.add(autor);
             }
@@ -76,8 +74,7 @@ public class AutorDAO {
         }
         return listaAutor;
     }
-    
-    
+
     public ArrayList<Autor> getIdAutorByNombre(String nombre) {
         ArrayList listaAutor = new ArrayList();
         Autor autor;
@@ -87,7 +84,7 @@ public class AutorDAO {
             pstm.setString(1, nombre);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                autor = new Autor();                
+                autor = new Autor();
                 autor.setIdAutor(rs.getInt("id_autor"));
                 listaAutor.add(autor);
             }
@@ -155,6 +152,22 @@ public class AutorDAO {
         } catch (Exception e) {
         }
         return responseDelete;
+    }
+
+    public boolean existAutor(String autor) {
+        boolean existe = false;
+        try {
+            sql = "SELECT * FROM autor WHERE nombre_completo = '"+autor+"' OR nombre_completo LIKE '" + autor + "%'";
+            pstm = cn.prepareStatement(sql);        
+            rs = pstm.executeQuery();
+            if (rs.next()) {                
+                existe = true;
+            }
+        } catch (Exception e) {
+            System.out.println("error" + e);
+        }
+        return existe;
+
     }
 
 }

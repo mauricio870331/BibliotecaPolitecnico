@@ -62,7 +62,9 @@
                       <Component id="txtNomAutor" min="-2" pref="201" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnCreateAutor" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="115" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnCancelarAutor" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="34" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -82,6 +84,7 @@
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNomAutor" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCreateAutor" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCancelarAutor" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="157" max="-2" attributes="0"/>
@@ -157,6 +160,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCancelarAutor">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cancelar"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

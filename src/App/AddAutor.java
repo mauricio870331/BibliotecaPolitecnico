@@ -38,6 +38,7 @@ public class AddAutor extends javax.swing.JDialog {
         tbAutor = new javax.swing.JTable();
         txtFindAutor = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnCancelarAutor = new javax.swing.JButton();
 
         mnuUpdateAutor.setText("Actualizar");
         popupAutor.add(mnuUpdateAutor);
@@ -76,6 +77,8 @@ public class AddAutor extends javax.swing.JDialog {
 
         jLabel2.setText("Buscar:");
 
+        btnCancelarAutor.setText("Cancelar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +93,9 @@ public class AddAutor extends javax.swing.JDialog {
                         .addComponent(txtNomAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCreateAutor)
-                        .addGap(0, 115, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarAutor)
+                        .addGap(0, 34, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -104,7 +109,8 @@ public class AddAutor extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNomAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateAutor))
+                    .addComponent(btnCreateAutor)
+                    .addComponent(btnCancelarAutor))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -168,6 +174,7 @@ public class AddAutor extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnCancelarAutor;
     public javax.swing.JButton btnCreateAutor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

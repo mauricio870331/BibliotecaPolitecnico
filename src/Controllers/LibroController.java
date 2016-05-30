@@ -5,22 +5,19 @@
  */
 package Controllers;
 
+import App.AcercaDe;
 import App.AddComment;
 import App.ChangePass;
 import App.ConfirmarRegistro;
 import App.DetalleLibro;
 import App.Principal;
-import App.SeletedPais;
 import Model.AreaDAO;
 import Model.AutorDAO;
 import Model.EditorialDAO;
 import Model.Libro;
 import Model.LibroDAO;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -33,17 +30,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -133,49 +127,51 @@ public final class LibroController extends WindowAdapter implements ActionListen
         this.pr.btnNewLibro.addActionListener(this);
         this.pr.btnCancelar.setEnabled(false);
         this.pr.cargarCopia.addActionListener(this);
+        this.pr.mnuAyuda.addMouseListener(this);
     }
 
     public void cargarLibros(JTable tbLibros) throws NoSuchFieldException, IOException {
 //        tbLibros.setDefaultRenderer(Object.class, new ImagensTabla());
         String Titulos[] = {"id Libro", "Titulo", "Autor", "Editorial", "Area"};
-        modelo = new DefaultTableModel(null, Titulos) {
-            @Override
-            public boolean isCellEditable(int row, int column) {//para evitar que las celdas sean editables
-                return false;
-            }
-        };
+        String Titulos1[] = {"No hay registros que coincidan con el criterio de busqueda"};
         Object[] columna = new Object[5];
         Iterator<Libro> nombreIterator = librodao.getListLibros(pagina, dato).iterator();
-        while (nombreIterator.hasNext()) {
-            Libro l = nombreIterator.next();
-            columna[0] = l.getIdLibro();
-            columna[1] = l.getTitulo();
-            columna[2] = (l.getIdAutor() != 0) ? autordao.getAutorById(l.getIdAutor()).get(0).getNombre() : "";
-            columna[3] = (l.getIdEditorial() != 0) ? editorialdao.getEditorialById(l.getIdEditorial()).get(0).getNombre() : "";
-            columna[4] = (l.getIdArea() != 0) ? areadao.getAreaById(l.getIdArea()).get(0).getNombre() : "";
-//            columna[5] = (l.getTipoLibro() != null) ? l.getTipoLibro() : "";
-//            InputStream img = l.getCaratula();
-//            if (img != null) {
-//                BufferedImage bi = ImageIO.read(img);
-//                ii = new ImageIcon(bi);
-//                Image conver = ii.getImage();
-//                Image tam = conver.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-//                iin = new ImageIcon(tam);
-//                columna[6] = new JLabel(iin);
-//            } else {
-//                columna[6] = new JLabel();
-//            }
-            modelo.addRow(columna);
+        if (nombreIterator.hasNext()) {
+            modelo = new DefaultTableModel(null, Titulos) {
+                @Override
+                public boolean isCellEditable(int row, int column) {//para evitar que las celdas sean editables
+                    return false;
+                }
+            };
+            while (nombreIterator.hasNext()) {
+                Libro l = nombreIterator.next();
+                columna[0] = l.getIdLibro();
+                columna[1] = l.getTitulo();
+                columna[2] = (l.getIdAutor() != 0) ? autordao.getAutorById(l.getIdAutor()).get(0).getNombre() : "";
+                columna[3] = (l.getIdEditorial() != 0) ? editorialdao.getEditorialById(l.getIdEditorial()).get(0).getNombre() : "";
+                columna[4] = (l.getIdArea() != 0) ? areadao.getAreaById(l.getIdArea()).get(0).getNombre() : "";
+                modelo.addRow(columna);
+            }
+            tbLibros.setModel(modelo);
+            TableRowSorter<TableModel> ordenar = new TableRowSorter<>(modelo);
+            tbLibros.setRowSorter(ordenar);
+            tbLibros.getColumnModel().getColumn(0).setMaxWidth(0);
+            tbLibros.getColumnModel().getColumn(0).setMinWidth(0);
+            tbLibros.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tbLibros.setModel(modelo);
+        } else {
+            modelo = new DefaultTableModel(null, Titulos1) {
+                @Override
+                public boolean isCellEditable(int row, int column) {//para evitar que las celdas sean editables
+                    return false;
+                }
+            };
+            tbLibros.setModel(modelo);
+            TableRowSorter<TableModel> ordenar = new TableRowSorter<>(modelo);
+            tbLibros.setRowSorter(ordenar);
+            tbLibros.setModel(modelo);
         }
-        tbLibros.setModel(modelo);
-        TableRowSorter<TableModel> ordenar = new TableRowSorter<>(modelo);
-        tbLibros.setRowSorter(ordenar);
-        tbLibros.getColumnModel().getColumn(0).setMaxWidth(0);
-        tbLibros.getColumnModel().getColumn(0).setMinWidth(0);
-        tbLibros.getColumnModel().getColumn(0).setPreferredWidth(0);
-//        tbLibros.getColumnModel().getColumn(5).setPreferredWidth(25);
-        tbLibros.setModel(modelo);
-//        tbLibros.setRowHeight(70);
+
     }
 
     @Override
@@ -592,8 +588,6 @@ public final class LibroController extends WindowAdapter implements ActionListen
             String apellido1 = "";
             String apellido2 = "";
             String nomAutor = "";
-            String msg = "<html>¿Esta seguro de eliminar el libro: <b><i>" + pr.tbLibros.getValueAt(fila, 1).toString() + "</i></b>?</html>";
-
             if (fila >= 0) {
                 String idlibro = pr.tbLibros.getValueAt(fila, 0).toString();
                 int Id = Integer.parseInt(idlibro);
@@ -625,48 +619,46 @@ public final class LibroController extends WindowAdapter implements ActionListen
                         apellido2 = autorSeparated[3];
                         nomAutor = apellido1 + " " + apellido2 + " " + nombre1.substring(0, 1) + " " + nombre2.substring(0, 1) + ",";
                         break;
-                }               
-//                pr.txttitulo.setText(pr.tbLibros.getValueAt(fila, 1).toString());
-//                pr.cboAutor.setSelectedItem(idAutor);
-//                pr.cboArea.setSelectedItem(idArea);
-//                pr.cboEditorial.setSelectedItem(idEditorial);
-//                cr.chkImportante.setSelected(librodao.getImportnte(idLibroUpdate).get(0).isImportante());               
-//                ac.textAComentarios.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios());
-//                comentario = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios();
-//                pr.cboTipoLibro.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoLibro());
-//                pr.cboTipoPasta.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoPasta());
-//                pr.spnEdicion.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getEdicion());
-//                pr.txtPrecio.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPrecio());
-//                pr.txtPaginas.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPaginas());
-//                pr.txtPais.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPais());
-//                try {
-//                    pr.cldFechaCompra.setDate(df.parse(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getFechaCompra()));
-//                } catch (ParseException ex) {
-//                    System.out.println("error de fecha " + ex);
-//                }
-//                try {
-//                    InputStream img = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getCaratula();
-//                    if (img != null) {
-//                        BufferedImage bi = ImageIO.read(img);
-//                        ii = new ImageIcon(bi);
-//                        Image conver = ii.getImage();
-//                        Image tam = conver.getScaledInstance(pr.lblCarattula.getWidth(), pr.lblCarattula.getHeight(), Image.SCALE_SMOOTH);
-//                        iin = new ImageIcon(tam);
-//                        pr.lblCarattula.setIcon(iin);
-//                    } else {
-//                        String path = "/Imagenes/Book.png";
-//                        URL url = this.getClass().getResource(path);
-//                        ImageIcon icon = new ImageIcon(url);
-//                        pr.lblCarattula.setIcon(icon);
-//                    }
-
-//                } catch (NumberFormatException | IOException ex) {
-//                    System.out.println("error aqui" + ex);
-//                }
+                }
                 DetalleLibro dl = new DetalleLibro(null, true);
-                dl.jlabelAutor.setText("<html>" + nomAutor + " (" + Integer.parseInt(librodao.getCaratulaByIdLibro(Id).get(0).getPublicacion()) 
-                                       + "), <b><i>"+pr.tbLibros.getValueAt(fila, 1).toString()+"</b></i>. "+librodao.getCaratulaByIdLibro(Id).get(0).getPais()
-                                       +", "+idEditorial+".</html>");
+                dl.setTitle("Detalle De Libro");
+                try {
+                    InputStream img = librodao.getCaratulaByIdLibro(Id).get(0).getCaratula();
+                    if (img != null) {
+                        BufferedImage bi = ImageIO.read(img);
+                        ii = new ImageIcon(bi);
+                        Image conver = ii.getImage();
+                        Image tam = conver.getScaledInstance(dl.lblCaratula.getWidth(), pr.lblCarattula.getHeight(), Image.SCALE_SMOOTH);
+                        iin = new ImageIcon(tam);
+                        dl.lblCaratula.setIcon(iin);
+                    } else {
+                        String path = "/Imagenes/Book.png";
+                        URL url = this.getClass().getResource(path);
+                        ImageIcon icon = new ImageIcon(url);
+                        dl.lblCaratula.setIcon(icon);
+                    }
+                } catch (NumberFormatException | IOException ex) {
+                    System.out.println("error aqui" + ex);
+                }
+                dl.jlabelAutor.setText("<html>" + nomAutor + " (" + Integer.parseInt(librodao.getCaratulaByIdLibro(Id).get(0).getPublicacion())
+                        + "), <b><i>" + pr.tbLibros.getValueAt(fila, 1).toString() + "</b></i>. " + librodao.getCaratulaByIdLibro(Id).get(0).getPais()
+                        + ", " + idEditorial + ".</html>");
+                String Import = "";
+                if (librodao.getImportnte(Id).get(0).isImportante()) {
+                    Import = "Si";
+                } else {
+                    Import = "No";
+                }
+                DecimalFormat formateador = new DecimalFormat("###,###.##");
+                dl.lblInfo.setText("<html><ul><li>Tipo de libro: " + librodao.getCaratulaByIdLibro(Id).get(0).getTipoLibro() + "</li>"
+                        + "<li>Tipo de Pasta: " + librodao.getCaratulaByIdLibro(Id).get(0).getTipoPasta() + "</li>"
+                        + "<li>Edición      : " + librodao.getCaratulaByIdLibro(Id).get(0).getEdicion() + "</li>"
+                        + "<li>Total Paginas: " + librodao.getCaratulaByIdLibro(Id).get(0).getPaginas() + "</li>"
+                        + "<li>Valor        : " + formateador.format(librodao.getCaratulaByIdLibro(Id).get(0).getPrecio()) + "</li>"
+                        + "<li>Comentarios  : " + librodao.getCaratulaByIdLibro(Id).get(0).getComentarios() + "</li>"
+                        + "<li>Es Importante: " + Import + "</li>"
+                        + "<li>Fecha de Compra: " + librodao.getCaratulaByIdLibro(Id).get(0).getFechaCompra() + "</li>"
+                        + "<li>Area         :   " + idArea + "</li></ul></html>");
                 dl.setLocationRelativeTo(null);
                 dl.setVisible(true);
             } else {
@@ -714,6 +706,12 @@ public final class LibroController extends WindowAdapter implements ActionListen
                     }
                 }
             }
+        }
+
+        if (e.getSource() == pr.mnuAyuda) {
+            AcercaDe ad = new AcercaDe(null, true);
+            ad.setLocationRelativeTo(null);
+            ad.setVisible(true);
         }
 
     }
@@ -804,6 +802,7 @@ public final class LibroController extends WindowAdapter implements ActionListen
         ImageIcon icon = new ImageIcon(url);
         pr.lblCarattula.setIcon(icon);
         idLibroUpdate = 0;
+        opc = "C";
     }
 
     @Override
@@ -818,16 +817,14 @@ public final class LibroController extends WindowAdapter implements ActionListen
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getSource() == pr.txtBuscarLibro) {
-            dato = pr.txtBuscarLibro.getText();
+            dato = pr.txtBuscarLibro.getText().trim();
             if (dato.equals("")) {
                 pagina = 1;
             }
             try {
                 cargarLibros(pr.tbLibros);
-
             } catch (NoSuchFieldException | IOException ex) {
-                Logger.getLogger(LibroController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LibroController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             if (librodao.totalPaginas(dato) <= 1) {
@@ -841,6 +838,7 @@ public final class LibroController extends WindowAdapter implements ActionListen
                 pr.btnUltimo.setEnabled(true);
                 pagina = 1;
             }
+
         }
 
     }

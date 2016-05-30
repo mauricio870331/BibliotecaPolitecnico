@@ -65,7 +65,7 @@ public class PaisDAO {
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                pais = new Pais();                
+                pais = new Pais();
                 pais.setNombre(rs.getString("descripcion"));
                 listPaises.add(pais);
             }
@@ -135,7 +135,7 @@ public class PaisDAO {
         return responseDelete;
     }
 
-     public ArrayList<Pais> getIdPaisByNombre(String nombre) {
+    public ArrayList<Pais> getIdPaisByNombre(String nombre) {
         ArrayList listaPais = new ArrayList();
         Pais pais;
         try {
@@ -144,7 +144,7 @@ public class PaisDAO {
             pstm.setString(1, nombre);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                pais = new Pais();                
+                pais = new Pais();
                 pais.setIdPais(rs.getInt("id"));
                 listaPais.add(pais);
             }
@@ -153,5 +153,20 @@ public class PaisDAO {
         }
         return listaPais;
     }
-    
+
+    public boolean existPais(String pais) {
+        boolean existe = false;
+        try {
+            sql = "SELECT * FROM paises WHERE descripcion = '" + pais + "' OR descripcion LIKE '" + pais + "%'";
+            pstm = cn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                existe = true;
+            }
+        } catch (Exception e) {
+            System.out.println("error" + e);
+        }
+        return existe;
+    }
+
 }

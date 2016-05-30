@@ -145,8 +145,8 @@ public class LibroDAO {
                         + " LEFT JOIN autor a ON l.id_autor = a.id_autor"
                         + " LEFT JOIN areas ar ON l.id_area = ar.id_area"
                         + " LEFT JOIN editorial e ON l.id_editorial = e.id_editorial"
-                        + " WHERE  l.titulo LIKE '" + dato + "%' OR a.nombre_completo LIKE '" + dato + "%'"
-                        + " OR ar.area LIKE '" + dato + "%' OR e.nom_editorial LIKE '" + dato + "%'"
+                        + " WHERE  l.titulo LIKE '%" + dato + "%' OR a.nombre_completo LIKE '%" + dato + "%'"
+                        + " OR ar.area LIKE '%" + dato + "%' OR e.nom_editorial LIKE '%" + dato + "%'"
                         + " ORDER BY l.titulo LIMIT " + inicio + "," + regitrosXpagina + "";
             } else {
                 sql = "SELECT l.* FROM libro l ORDER BY l.titulo LIMIT " + inicio + "," + regitrosXpagina + "";

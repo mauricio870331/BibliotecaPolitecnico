@@ -110,7 +110,7 @@ public final class LoginController implements ActionListener, KeyListener {
             pass = new String(lg.txtPass.getPassword());
             if (pass.equals("")) {
                 JOptionPane.showMessageDialog(null, "La llave no debe estar vacia..!");
-                lg.txtPass.requestFocus();
+                lg.txtPass.requestFocus();                
                 return;
             }
             sql = "SELECT id FROM password WHERE pas = ?";
@@ -122,6 +122,8 @@ public final class LoginController implements ActionListener, KeyListener {
                     id = rs.getInt("id");
                 } else {
                     JOptionPane.showMessageDialog(null, "La llave es incorrecta");
+                    lg.txtPass.setText("");
+                    lg.txtPass.requestFocus(); 
                     return;
                 }
             } catch (SQLException ex) {
@@ -174,18 +176,6 @@ public final class LoginController implements ActionListener, KeyListener {
         if (e.getSource() == lg.btnSalir) {
             System.exit(0);
         }
-//        if (e.getSource() == pr.btnLogout) {
-//            int response = JOptionPane.showConfirmDialog(null, "Esta seguro de cerrar la sesion ?", "Aviso..!",
-//                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-//            if (response == JOptionPane.YES_OPTION) {
-//                pr.dispose();
-//                autorController = null;
-//                pr = null;
-//                LoginController lgc = new LoginController(lg = new Login(), pr = new Principal());
-//                lg.setVisible(true);
-//                lg.setLocationRelativeTo(null);
-//            }
-//        }
     }
 
     @Override

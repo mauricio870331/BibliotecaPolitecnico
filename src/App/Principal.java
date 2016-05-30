@@ -93,6 +93,7 @@ public class Principal extends javax.swing.JFrame {
         cargarCopia = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         exit = new javax.swing.JMenuItem();
+        mnuAyuda = new javax.swing.JMenu();
 
         mnuUpdateLibro.setText("Actualizar");
         PopupLibros.add(mnuUpdateLibro);
@@ -493,6 +494,11 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuAdministrar);
 
+        mnuAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ayuda.png"))); // NOI18N
+        mnuAyuda.setToolTipText("Acerca de...");
+        mnuAyuda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jMenuBar1.add(mnuAyuda);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -603,6 +609,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jpnTadmin;
     public javax.swing.JLabel lblCarattula;
     private javax.swing.JMenu mnuAdministrar;
+    public javax.swing.JMenu mnuAyuda;
     public javax.swing.JMenuItem mnuDeleteLibro;
     public javax.swing.JMenuItem mnuDetalleLibro;
     public javax.swing.JMenuItem mnuUpdateLibro;

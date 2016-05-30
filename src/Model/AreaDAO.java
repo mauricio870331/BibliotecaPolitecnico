@@ -65,7 +65,7 @@ public class AreaDAO {
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                area = new Area();                
+                area = new Area();
                 area.setNombre(rs.getString("area"));
                 listaArea.add(area);
             }
@@ -135,7 +135,7 @@ public class AreaDAO {
         return responseDelete;
     }
 
-     public ArrayList<Area> getIdAreaByNombre(String nombre) {
+    public ArrayList<Area> getIdAreaByNombre(String nombre) {
         ArrayList listaArea = new ArrayList();
         Area area;
         try {
@@ -144,7 +144,7 @@ public class AreaDAO {
             pstm.setString(1, nombre);
             rs = pstm.executeQuery();
             if (rs.next()) {
-                area = new Area();                
+                area = new Area();
                 area.setIdArea(rs.getInt("id_area"));
                 listaArea.add(area);
             }
@@ -153,5 +153,20 @@ public class AreaDAO {
         }
         return listaArea;
     }
-    
+
+    public boolean existArea(String area) {
+        boolean existe = false;
+        try {
+            sql = "SELECT * FROM areas WHERE area = '" + area + "' OR area LIKE '" + area + "%'";
+            pstm = cn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+            if (rs.next()) {                
+                existe = true;
+            }
+        } catch (Exception e) {
+            System.out.println("error" + e);
+        }
+        return existe;
+    }
+
 }

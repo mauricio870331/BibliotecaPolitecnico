@@ -12,6 +12,8 @@ import App.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -26,7 +28,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Mauricio
  */
-public final class AddPaisController implements ActionListener, KeyListener {
+public final class AddPaisController extends MouseAdapter implements ActionListener, KeyListener {
 
     String dato = "";
     Principal pr;
@@ -46,6 +48,7 @@ public final class AddPaisController implements ActionListener, KeyListener {
         aa.mnuDeleteArea.addActionListener(this);
         aa.txtFindPaises.addKeyListener(this);
         aa.btnCancelarPais.addActionListener(this);
+        aa.tbPaises.addMouseListener(this);
     }
 
     public void cargarPais(JTable tbArea, String dato) {
@@ -91,14 +94,19 @@ public final class AddPaisController implements ActionListener, KeyListener {
         }
 
         if (e.getSource() == aa.btnCancelarPais) {
-            limpiarForm();
-            opc = "C";
+            limpiarForm();            
         }
 
         if (e.getSource() == aa.btnCreatePais) {
             String area = aa.txtNomPais.getText();
             if (area.equals("")) {
                 JOptionPane.showMessageDialog(null, "Ingrese elnombre de la ciudad..!");
+                aa.txtNomPais.requestFocus();
+                return;
+            }
+            if (paisdao.existPais(area)) {
+                JOptionPane.showMessageDialog(null, "La ciudad: "+area+" coincide con una existente\nNo es necesario crearla otra vez.\nSi lo desea puede actualizarla..!");
+                aa.txtNomPais.setText("");
                 aa.txtNomPais.requestFocus();
                 return;
             }
@@ -120,7 +128,6 @@ public final class AddPaisController implements ActionListener, KeyListener {
                 } else {
                     cargarPais(aa.tbPaises, dato);
                 }
-                opc = "C";
                 limpiarForm();
             } else if (opc.equals("C")) {
                 JOptionPane.showMessageDialog(null, "No se pudo crear el Registro");
@@ -179,11 +186,8 @@ public final class AddPaisController implements ActionListener, KeyListener {
     }
 
     private void limpiarForm() {
-//        pr.cboArea.setSelectedItem("-- Seleccione --");
-//        pr.cboAutor.setSelectedItem("-- Seleccione --");
-//        pr.cboEditorial.setSelectedItem("-- Seleccione --");
-//        pr.txttitulo.setText("");
         aa.txtNomPais.setText("");
+        opc = "C";        
     }
 
     public void setArea() {
@@ -191,6 +195,19 @@ public final class AddPaisController implements ActionListener, KeyListener {
         if (ar.hasNext()) {
             Pais elemento = ar.next();
             pr.txtPais.setText(elemento.getNombre());
+        }
+
+    }
+    
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {           
+            int fila = aa.tbPaises.getSelectedRow();
+            if (fila >= 0) {
+                pr.txtPais.setText(aa.tbPaises.getValueAt(fila, 1).toString());
+                aa.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No has seleccionado un registro..!");
+            }
         }
 
     }

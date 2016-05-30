@@ -11,6 +11,8 @@ import Model.*;
 import App.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -25,7 +27,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Mauricio
  */
-public final class AreaController implements ActionListener, KeyListener {
+public final class AreaController extends MouseAdapter implements ActionListener, KeyListener {
 
     String dato = "";
     Principal pr;
@@ -44,6 +46,8 @@ public final class AreaController implements ActionListener, KeyListener {
         aa.mnuUpdateArea.addActionListener(this);
         aa.mnuDeleteArea.addActionListener(this);
         aa.txtFindArea.addKeyListener(this);
+        aa.btnCancelaArea.addActionListener(this);
+        aa.tbArea.addMouseListener(this);
     }
 
     public void cargarArea(JTable tbArea, String dato) {
@@ -87,11 +91,21 @@ public final class AreaController implements ActionListener, KeyListener {
             aa.setLocationRelativeTo(null);
             aa.setVisible(true);
         }
+        
+        if (e.getSource() == aa.btnCancelaArea) {
+            limpiarForm();            
+        }
 
         if (e.getSource() == aa.btnCreateArea) {
             String area = aa.txtNomArea.getText();
             if (area.equals("")) {
                 JOptionPane.showMessageDialog(null, "Ingrese elnombre del Autor..!");
+                aa.txtNomArea.requestFocus();
+                return;
+            }
+            if (areadao.existArea(area)) {
+                JOptionPane.showMessageDialog(null, "El area: "+area+" coincide con una existente\nNo es necesario crearla otra vez.\nSi lo desea puede actualizarlo..!");
+                aa.txtNomArea.setText("");
                 aa.txtNomArea.requestFocus();
                 return;
             }
@@ -177,11 +191,8 @@ public final class AreaController implements ActionListener, KeyListener {
     }
 
     private void limpiarForm() {
-//        pr.cboArea.setSelectedItem("-- Seleccione --");
-//        pr.cboAutor.setSelectedItem("-- Seleccione --");
-//        pr.cboEditorial.setSelectedItem("-- Seleccione --");
-//        pr.txttitulo.setText("");
         aa.txtNomArea.setText("");
+        opc="C";       
     }
 
     public void setArea() {
@@ -191,6 +202,17 @@ public final class AreaController implements ActionListener, KeyListener {
             pr.cboArea.setSelectedItem(elemento.getNombre());
         }
 
+    }
+     public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {           
+            int fila = aa.tbArea.getSelectedRow();
+            if (fila >= 0) {
+                pr.cboArea.setSelectedItem(aa.tbArea.getValueAt(fila, 1).toString());
+                aa.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No has seleccionado un registro..!");
+            }
+        }
     }
 
 }
