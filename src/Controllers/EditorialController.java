@@ -57,8 +57,7 @@ public final class EditorialController extends MouseAdapter implements ActionLis
         ae.btnCreateEditorial.addActionListener(this);
         ae.mnuUpdateEditorial.addActionListener(this);
         ae.mnuDeleteEditorial.addActionListener(this);
-        ae.txtFindEditorial.addKeyListener(this);
-        ae.btnCreateEditorial.addActionListener(this);
+        ae.txtFindEditorial.addKeyListener(this);       
         ae.tbEditorial.addMouseListener(this);
     }
 
