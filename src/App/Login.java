@@ -19,6 +19,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Imagenes/logo.png")).getImage());
+        this.setTitle("Bienvenido");
     }
 
     /**
@@ -32,7 +33,6 @@ public class Login extends javax.swing.JFrame {
 
         txtPass = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         btnIngresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
@@ -46,10 +46,6 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Contraseña:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("Login...");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         btnIngresar.setText("Ingresar");
         getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
@@ -99,7 +95,6 @@ public class Login extends javax.swing.JFrame {
     public javax.swing.JButton btnIngresar;
     public javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     public javax.swing.JPasswordField txtPass;
     // End of variables declaration//GEN-END:variables
 }

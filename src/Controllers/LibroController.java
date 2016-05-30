@@ -8,13 +8,19 @@ package Controllers;
 import App.AddComment;
 import App.ChangePass;
 import App.ConfirmarRegistro;
+import App.DetalleLibro;
 import App.Principal;
+import App.SeletedPais;
 import Model.AreaDAO;
 import Model.AutorDAO;
 import Model.EditorialDAO;
 import Model.Libro;
 import Model.LibroDAO;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -25,10 +31,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,6 +53,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -52,7 +66,7 @@ import static jdk.nashorn.internal.objects.NativeString.trim;
  *
  * @author Mauricio Herrera
  */
-public final class LibroController implements ActionListener, MouseListener, KeyListener, ItemListener, FocusListener {
+public final class LibroController extends WindowAdapter implements ActionListener, MouseListener, KeyListener, ItemListener, FocusListener {
 
     int idLibroUpdate = 0;
     int idUser = 0;
@@ -89,6 +103,7 @@ public final class LibroController implements ActionListener, MouseListener, Key
         this.cr = cr;
         this.ac = ac;
         this.id = id;
+        this.pr.addWindowListener(this);
         this.pr.btnRegistrar.addActionListener(this);
         this.pr.cboArea.addActionListener(this);
         this.pr.cboAutor.addActionListener(this);
@@ -102,6 +117,7 @@ public final class LibroController implements ActionListener, MouseListener, Key
         this.pr.btnPrimero.addActionListener(this);
         this.pr.btnUltimo.addActionListener(this);
         this.pr.txtBuscarLibro.addKeyListener(this);
+        this.pr.mnuDetalleLibro.addActionListener(this);
         this.cr.chkImportante.addItemListener(this);
         this.ac.btAddCo.addActionListener(this);
         this.ac.btnCancelComm.addActionListener(this);
@@ -113,7 +129,10 @@ public final class LibroController implements ActionListener, MouseListener, Key
         this.pr.copiaDeSeguridad.addActionListener(this);
         this.pr.cldFechaCompra.setDate(date);
         this.pr.spnEdicion.addFocusListener(this);
-
+        this.pr.btnSelectCiudad.addActionListener(this);
+        this.pr.btnNewLibro.addActionListener(this);
+        this.pr.btnCancelar.setEnabled(false);
+        this.pr.cargarCopia.addActionListener(this);
     }
 
     public void cargarLibros(JTable tbLibros) throws NoSuchFieldException, IOException {
@@ -161,20 +180,50 @@ public final class LibroController implements ActionListener, MouseListener, Key
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == pr.btnNewLibro) {
+            opc = "C";
+            enableControls(true);
+            limpiarFormLibro();
+            pr.btnCancelar.setEnabled(true);
+            pr.btnNewLibro.setEnabled(false);
+            pr.btnRegistrar.setText("Guardar");
+            pr.btnAddComment.setText("+");
+        }
+
+        if (e.getSource() == pr.cargarCopia) {
+
+            String cad = "C:/xampp/mysql/bin/mysql -u root gestor_libros < C:/GestorLibrosBackup/gestor_libros.sql";
+            File fcopi = new File("C:/GestorLibrosBackup/copia_seguridad.bat");
+            try {
+                FileWriter fw = new FileWriter(fcopi);
+                fw.write(cad, 0, cad.length());
+                fw.close();
+                Runtime.getRuntime().exec("C:/GestorLibrosBackup/copia_seguridad.bat");
+                JOptionPane.showMessageDialog(null, "Base de datos restaurada con exito");
+
+            } catch (IOException | HeadlessException er) {
+                System.out.println("error: " + er);
+            }
+
+        }
+
         if (e.getSource() == pr.copiaDeSeguridad) {
-            System.out.println("exportando");
+            File folder = new File("C:/GestorLibrosBackup");
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
             Runtime backup = Runtime.getRuntime();
             try {
-                backup.exec("C:/xampp/mysql/bin/mysqldump -v -v -v --host=localhost --user=root --port=3306 --protocol=tcp --force --allow-keywords --compress --add-drop-table --result-file=bd.sql --databases biblioteca_politecnico");
+                backup.exec("C:/xampp/mysql/bin/mysqldump -v -v -v --host=localhost --user=root --port=3306 --protocol=tcp --force --allow-keywords --compress --add-drop-table --result-file=C:/GestorLibrosBackup/gestor_libros.sql --databases gestor_libros");
 
             } catch (IOException ex) {
                 Logger.getLogger(LibroController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            JOptionPane.showMessageDialog(null, "Backup creado correctamente");
+            JOptionPane.showMessageDialog(null, "Backup creado correctamente en: C:/GestorLibrosBackup/gestor_libros.sql");
         }
 
         if (e.getSource() == pr.exit) {
-            System.exit(0);
+            valideExit();
         }
 
         if (e.getSource() == pr.changePassword) {
@@ -275,16 +324,17 @@ public final class LibroController implements ActionListener, MouseListener, Key
                 diaSel = dfD.format(pr.cldFechaCompra.getDate());
             }
             if ((Integer.parseInt(añoSelc) > Integer.parseInt(añoActual)) || (Integer.parseInt(mesSelect) > Integer.parseInt(mesActual)) || (Integer.parseInt(diaSel) > Integer.parseInt(diaActual))) {
-                JOptionPane.showMessageDialog(null, "La fecha no debe ser duperior a la actual");
+                JOptionPane.showMessageDialog(null, "La fecha no debe ser superior a la actual");
                 pr.cldFechaCompra.requestFocus();
+                pr.cldFechaCompra.setDate(date);
                 return;
             }
 
-            if (pr.spnEdicion.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Ingrese Número de Edición");
-                pr.spnEdicion.requestFocus();
-                return;
-            }
+//            if (pr.spnEdicion.getText().equals("")) {
+//                JOptionPane.showMessageDialog(null, "Ingrese Número de Edición");
+//                pr.spnEdicion.requestFocus();
+//                return;
+//            }
             edicion = pr.spnEdicion.getText();
             int paginas = 0;
             if (pr.txtPaginas.getValue().equals("")) {
@@ -294,7 +344,6 @@ public final class LibroController implements ActionListener, MouseListener, Key
 
             }
             paginas = (int) pr.txtPaginas.getValue();
-
             l.setPublicacion(publicacion);
             l.setEdicion(edicion);
             l.setComentarios(comentario);
@@ -332,6 +381,9 @@ public final class LibroController implements ActionListener, MouseListener, Key
             String rpta = librodao.create(l, opc);
             if (rpta != null) {
                 JOptionPane.showMessageDialog(null, rpta);
+                enableControls(false);
+                pr.btnRegistrar.setText("Guardar");
+                pr.btnAddComment.setText("+");
                 try {
                     cargarLibros(pr.tbLibros);
                 } catch (NoSuchFieldException | IOException ex) {
@@ -358,6 +410,11 @@ public final class LibroController implements ActionListener, MouseListener, Key
         if (e.getSource() == pr.mnuUpdateLibro) {
             int fila = pr.tbLibros.getSelectedRow();
             if (fila >= 0) {
+                enableControls(true);
+                pr.btnCancelar.setEnabled(true);
+                pr.btnNewLibro.setEnabled(false);
+                pr.btnRegistrar.setText("Actualizar");
+                pr.btnAddComment.setText("Ver");
                 opc = "U";
                 String idlibro = pr.tbLibros.getValueAt(fila, 0).toString();
                 idLibroUpdate = Integer.parseInt(idlibro);
@@ -377,10 +434,11 @@ public final class LibroController implements ActionListener, MouseListener, Key
                 pr.spnEdicion.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getEdicion());
                 pr.txtPrecio.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPrecio());
                 pr.txtPaginas.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPaginas());
+                pr.txtPais.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPais());
                 try {
                     pr.cldFechaCompra.setDate(df.parse(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getFechaCompra()));
                 } catch (ParseException ex) {
-                    System.out.println("error de fecha "+ex);
+                    System.out.println("error de fecha " + ex);
                 }
                 try {
                     InputStream img = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getCaratula();
@@ -425,14 +483,22 @@ public final class LibroController implements ActionListener, MouseListener, Key
         if (e.getSource() == pr.mnuDeleteLibro) {
             int fila = pr.tbLibros.getSelectedRow();
             if (fila >= 0) {
-                int response = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar el registro ?", "Aviso..!",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                String msg = "<html>¿Esta seguro de eliminar el libro: <b><i>" + pr.tbLibros.getValueAt(fila, 1).toString() + "</i></b>?</html>";
+                JLabel label = new JLabel(msg);
+                int response = JOptionPane.showConfirmDialog(null, label, "Aviso..!",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE
+                );
                 if (response == JOptionPane.YES_OPTION) {
                     String rptaDelete = librodao.deleteLibro(Integer.parseInt(pr.tbLibros.getValueAt(fila, 0).toString()));
                     if (rptaDelete != null) {
                         JOptionPane.showMessageDialog(null, rptaDelete);
                         try {
                             cargarLibros(pr.tbLibros);
+                            enableControls(false);
+                            pr.btnCancelar.setEnabled(false);
+                            pr.btnNewLibro.setEnabled(true);
+                            pr.btnRegistrar.setText("Guardar");
+                            pr.btnAddComment.setText("+");
                         } catch (NoSuchFieldException | IOException ex) {
                             Logger.getLogger(LibroController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -445,6 +511,11 @@ public final class LibroController implements ActionListener, MouseListener, Key
 
         if (e.getSource() == pr.btnCancelar) {
             limpiarFormLibro();
+            enableControls(false);
+            pr.btnCancelar.setEnabled(false);
+            pr.btnNewLibro.setEnabled(true);
+            pr.btnRegistrar.setText("Guardar");
+            pr.btnAddComment.setText("+");
         }
 
         if (e.getSource() == pr.btnAdelante) {
@@ -514,39 +585,134 @@ public final class LibroController implements ActionListener, MouseListener, Key
 
         }
 
+        if (e.getSource() == pr.mnuDetalleLibro) {
+            int fila = pr.tbLibros.getSelectedRow();
+            String nombre1 = "";
+            String nombre2 = "";
+            String apellido1 = "";
+            String apellido2 = "";
+            String nomAutor = "";
+            String msg = "<html>¿Esta seguro de eliminar el libro: <b><i>" + pr.tbLibros.getValueAt(fila, 1).toString() + "</i></b>?</html>";
+
+            if (fila >= 0) {
+                String idlibro = pr.tbLibros.getValueAt(fila, 0).toString();
+                int Id = Integer.parseInt(idlibro);
+                String idAutor = pr.tbLibros.getValueAt(fila, 2).toString();
+                String idEditorial = pr.tbLibros.getValueAt(fila, 3).toString();
+                String idArea = pr.tbLibros.getValueAt(fila, 4).toString();
+                String[] autorSeparated = idAutor.split(" ");
+
+                switch (autorSeparated.length) {
+                    case 1:
+                        nombre1 = autorSeparated[0];
+                        nomAutor = nombre1 + ",";
+                        break;
+                    case 2:
+                        nombre1 = autorSeparated[0];
+                        apellido1 = autorSeparated[1];
+                        nomAutor = apellido1 + " " + nombre1.substring(0, 1) + ",";
+                        break;
+                    case 3:
+                        nombre1 = autorSeparated[0];
+                        nombre2 = autorSeparated[1];
+                        apellido1 = autorSeparated[2];
+                        nomAutor = apellido1 + " " + nombre1.substring(0, 1) + " " + nombre2.substring(0, 1) + ",";
+                        break;
+                    case 4:
+                        nombre1 = autorSeparated[0];
+                        nombre2 = autorSeparated[1];
+                        apellido1 = autorSeparated[2];
+                        apellido2 = autorSeparated[3];
+                        nomAutor = apellido1 + " " + apellido2 + " " + nombre1.substring(0, 1) + " " + nombre2.substring(0, 1) + ",";
+                        break;
+                }               
+//                pr.txttitulo.setText(pr.tbLibros.getValueAt(fila, 1).toString());
+//                pr.cboAutor.setSelectedItem(idAutor);
+//                pr.cboArea.setSelectedItem(idArea);
+//                pr.cboEditorial.setSelectedItem(idEditorial);
+//                cr.chkImportante.setSelected(librodao.getImportnte(idLibroUpdate).get(0).isImportante());               
+//                ac.textAComentarios.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios());
+//                comentario = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getComentarios();
+//                pr.cboTipoLibro.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoLibro());
+//                pr.cboTipoPasta.setSelectedItem(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getTipoPasta());
+//                pr.spnEdicion.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getEdicion());
+//                pr.txtPrecio.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPrecio());
+//                pr.txtPaginas.setValue(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPaginas());
+//                pr.txtPais.setText(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getPais());
+//                try {
+//                    pr.cldFechaCompra.setDate(df.parse(librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getFechaCompra()));
+//                } catch (ParseException ex) {
+//                    System.out.println("error de fecha " + ex);
+//                }
+//                try {
+//                    InputStream img = librodao.getCaratulaByIdLibro(idLibroUpdate).get(0).getCaratula();
+//                    if (img != null) {
+//                        BufferedImage bi = ImageIO.read(img);
+//                        ii = new ImageIcon(bi);
+//                        Image conver = ii.getImage();
+//                        Image tam = conver.getScaledInstance(pr.lblCarattula.getWidth(), pr.lblCarattula.getHeight(), Image.SCALE_SMOOTH);
+//                        iin = new ImageIcon(tam);
+//                        pr.lblCarattula.setIcon(iin);
+//                    } else {
+//                        String path = "/Imagenes/Book.png";
+//                        URL url = this.getClass().getResource(path);
+//                        ImageIcon icon = new ImageIcon(url);
+//                        pr.lblCarattula.setIcon(icon);
+//                    }
+
+//                } catch (NumberFormatException | IOException ex) {
+//                    System.out.println("error aqui" + ex);
+//                }
+                DetalleLibro dl = new DetalleLibro(null, true);
+                dl.jlabelAutor.setText("<html>" + nomAutor + " (" + Integer.parseInt(librodao.getCaratulaByIdLibro(Id).get(0).getPublicacion()) 
+                                       + "), <b><i>"+pr.tbLibros.getValueAt(fila, 1).toString()+"</b></i>. "+librodao.getCaratulaByIdLibro(Id).get(0).getPais()
+                                       +", "+idEditorial+".</html>");
+                dl.setLocationRelativeTo(null);
+                dl.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "No has seleccionado un registro..!");
+            }
+
+        }
+
     }
 
     private void addFilter() {
         FileChooser.setFileFilter(new FileNameExtensionFilter("Imagen (*.PNG)", "png"));
         FileChooser.setFileFilter(new FileNameExtensionFilter("Imagen (*.JPG)", "jpg"));
     }
-//Eventos del mouse
 
+    //Eventos del mouse
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == pr.lblCarattula) {
-            countAction++;
-            File archivo;
-            if (countAction == 1) {
-                addFilter();
-            }
-            FileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (FileChooser.showDialog(null, "Seleccionar Archivo") == JFileChooser.APPROVE_OPTION) {
-                archivo = FileChooser.getSelectedFile();
-                if (archivo.getName().endsWith("png") || archivo.getName().endsWith("PNG") || archivo.getName().endsWith("jpg")) {
-                    foto = String.valueOf(archivo);
-                    ImageIcon icon = new ImageIcon(archivo.toString());
-                    Image conver = icon.getImage();
-                    Image tam = conver.getScaledInstance(pr.lblCarattula.getWidth(), pr.lblCarattula.getHeight(), Image.SCALE_SMOOTH);
-                    iin = new ImageIcon(tam);
-                    pr.lblCarattula.setIcon(iin);
-                    String NombreArchivo = FileChooser.getName(archivo);
-                    JOptionPane.showMessageDialog(null, "Archivo Seleccionado: " + String.valueOf(NombreArchivo));
-                } else {
-                    JOptionPane.showMessageDialog(null, "Elija un formato valido");
+            if (pr.lblCarattula.isEnabled()) {
+                countAction++;
+                File archivo;
+                if (countAction == 1) {
+                    addFilter();
                 }
-            } else {
+                FileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                if (FileChooser.showDialog(null, "Seleccionar Archivo") == JFileChooser.APPROVE_OPTION) {
+                    archivo = FileChooser.getSelectedFile();
+                    if (archivo.length() > 1000000) {//archivo.length() tamaño en bytes
+                        JOptionPane.showMessageDialog(null, "El tamaño minimo para la imagen debe ser de 1 Mega,\nSeleccione otra.");
+                        return;
+                    }
+                    if (archivo.getName().endsWith("png") || archivo.getName().endsWith("PNG") || archivo.getName().endsWith("jpg")) {
+                        foto = String.valueOf(archivo);
+                        ImageIcon icon = new ImageIcon(archivo.toString());
+                        Image conver = icon.getImage();
+                        Image tam = conver.getScaledInstance(pr.lblCarattula.getWidth(), pr.lblCarattula.getHeight(), Image.SCALE_SMOOTH);
+                        iin = new ImageIcon(tam);
+                        pr.lblCarattula.setIcon(iin);
+                        String NombreArchivo = FileChooser.getName(archivo);
 
+                        JOptionPane.showMessageDialog(null, "Archivo Seleccionado: " + String.valueOf(NombreArchivo));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Elija un formato valido");
+                    }
+                }
             }
         }
 
@@ -565,6 +731,34 @@ public final class LibroController implements ActionListener, MouseListener, Key
         cr.lblPais.setText("");
         cr.lblPrecio.setText("");
         cr.lblEdicion.setText("");
+    }
+
+    public void enableControls(boolean en) {
+        pr.txttitulo.setEnabled(en);
+        pr.cboArea.setEnabled(en);
+        pr.cboAutor.setEnabled(en);
+        pr.cboEditorial.setEnabled(en);
+        pr.cboTipoLibro.setEnabled(en);
+        pr.cboTipoPasta.setEnabled(en);
+        pr.txtPrecio.setEnabled(en);
+        pr.txtPaginas.setEnabled(en);
+        pr.cldFechaCompra.setEnabled(en);
+        pr.txtPais.setEnabled(en);
+        pr.yearPublicacion.setEnabled(en);
+        pr.spnEdicion.setEnabled(en);
+        ac.textAComentarios.setEnabled(en);
+        cr.chkImportante.setEnabled(en);
+        String path = "/Imagenes/Book.png";
+        URL url = this.getClass().getResource(path);
+        ImageIcon icon = new ImageIcon(url);
+        pr.lblCarattula.setIcon(icon);
+        pr.lblCarattula.setEnabled(en);
+        pr.btnAddArea.setEnabled(en);
+        pr.btnAddAutor.setEnabled(en);
+        pr.btnAddEditorial.setEnabled(en);
+        pr.btnSelectCiudad.setEnabled(en);
+        pr.btnAddComment.setEnabled(en);
+        pr.btnRegistrar.setEnabled(en);
     }
 
     @Override
@@ -668,10 +862,10 @@ public final class LibroController implements ActionListener, MouseListener, Key
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == cr.chkImportante) {
             if (cr.chkImportante.isSelected()) {
-                importante = true;                
+                importante = true;
 //                System.out.println("aqui");
             } else {
-                importante = false;                
+                importante = false;
 //                System.out.println("no se");
             }
         }
@@ -757,6 +951,19 @@ public final class LibroController implements ActionListener, MouseListener, Key
 
         }
 
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        valideExit();
+    }
+
+    public void valideExit() {
+        int response = JOptionPane.showConfirmDialog(null, "¿Esta seguro de cerrar la Sesión?", "Aviso..!",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 
     public static boolean isNumeric(String cadena) {

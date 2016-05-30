@@ -101,7 +101,7 @@ public class LibroDAO {
             pstm.setBoolean(11, l.isImportante());
             pstm.setString(12, l.getEdicion());            
             pstm.setString(13, l.getPais());
-            pstm.setString(14, l.getPublicacion());
+            pstm.setString(14, l.getPublicacion());           
             if (opc.equals("C")) {
                 if (!l.getLargo().equals("")) {
                     pstm.setBinaryStream(15, fis, (int) img.length());
@@ -183,7 +183,7 @@ public class LibroDAO {
         Libro l;
         try {
             sql = "SELECT caratula, año_publicacion, comentarios, tipo_libro, tipo_pasta, fecha_compra"
-                    + " , precio, num_edicion, 	paginas FROM libro WHERE id_libro = ?";
+                    + " , precio, num_edicion, 	paginas, pais FROM libro WHERE id_libro = ?";
             pstm = cn.prepareStatement(sql);
             pstm.setInt(1, idLibro);
             rs = pstm.executeQuery();
@@ -191,13 +191,18 @@ public class LibroDAO {
                 l = new Libro();
                 l.setPublicacion(rs.getString("año_publicacion"));
                 l.setCaratula(rs.getBinaryStream("caratula"));
-                l.setComentarios(rs.getString("comentarios"));
+                if (rs.getString("comentarios")!=null) {
+                  l.setComentarios(rs.getString("comentarios"));
+                }else{
+                  l.setComentarios("");
+                }                
                 l.setTipoLibro(rs.getString("tipo_libro"));
                 l.setTipoPasta(rs.getString("tipo_pasta"));
                 l.setFechaCompra(rs.getString("fecha_compra"));
                 l.setPrecio(rs.getInt("precio"));
                 l.setEdicion(rs.getString("num_edicion"));
                 l.setPaginas(rs.getInt("paginas"));
+                l.setPais(rs.getString("pais"));
                 ListaLibros.add(l);
             }
         } catch (Exception e) {

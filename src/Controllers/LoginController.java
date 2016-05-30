@@ -6,6 +6,7 @@
 package Controllers;
 
 import App.AddComment;
+import App.AddPais;
 import App.ConfirmarRegistro;
 import App.Login;
 import App.Principal;
@@ -16,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,8 +44,10 @@ public final class LoginController implements ActionListener, KeyListener {
     LibroDAO librodao;
     ConfirmarRegistro cr;
     AddComment ac;
+    AddPais ap;
     AutorController autorController;
     AreaController areaController;
+    AddPaisController paiscontroller;
     EditorialController editorialController;
     LibroController librocontroller;
     String pass = "";
@@ -70,14 +74,20 @@ public final class LoginController implements ActionListener, KeyListener {
         this.ac = ac;
         this.lg.btnIngresar.addActionListener(this);
         this.lg.btnSalir.addActionListener(this);
-        this.lg.txtPass.addKeyListener(this);      
-        ocultarCapas();
+        this.lg.txtPass.addKeyListener(this);
+        ocultaBorrarBackupfile();
+
     }
 
-    public void ocultarCapas() {
-//        this.pr.lblIdArea.setVisible(false);
-//        this.pr.lblIdAutor.setVisible(false);
-//        this.pr.lblIdEditorial.setVisible(false);
+    public void ocultaBorrarBackupfile() {
+        File file = new File("C:/GestorLibrosBackup/copia_seguridad.bat");
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("borrado");
+            } else {
+                System.out.println("No borrado");
+            }
+        }
     }
 
     @Override
@@ -91,8 +101,8 @@ public final class LoginController implements ActionListener, KeyListener {
             } catch (ParseException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            String añoActual = dfY.format(date);
-//            String añoSelc = dfY.format(f);
+            String añoActual = dfY.format(date);
+            String añoSelc = dfY.format(f);
             String mesActual = dfM.format(date);
             String mesSelect = dfM.format(f);
 //            String diaActual = dfD.format(date);
@@ -102,22 +112,22 @@ public final class LoginController implements ActionListener, KeyListener {
                 JOptionPane.showMessageDialog(null, "La llave no debe estar vacia..!");
                 lg.txtPass.requestFocus();
                 return;
-            }            
+            }
             sql = "SELECT id FROM password WHERE pas = ?";
             try {
                 pstm = cn.prepareStatement(sql);
                 pstm.setString(1, pass);
                 rs = pstm.executeQuery();
                 if (rs.next()) {
-                  id = rs.getInt("id");                   
-                }else{
-                  JOptionPane.showMessageDialog(null, "La llave es incorrecta");
-                  return;
+                    id = rs.getInt("id");
+                } else {
+                    JOptionPane.showMessageDialog(null, "La llave es incorrecta");
+                    return;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }           
-            if (id==1 && (Integer.parseInt(mesSelect) > Integer.parseInt(mesActual))) {              
+            }
+            if (id == 1 && (Integer.parseInt(añoSelc) == Integer.parseInt(añoActual)) && (Integer.parseInt(mesSelect) > Integer.parseInt(mesActual))) {
                 pr.setLocationRelativeTo(null);
                 pr.setVisible(true);
                 pr.txttitulo.requestFocus();
@@ -127,16 +137,20 @@ public final class LoginController implements ActionListener, KeyListener {
                 areaController.cargarCboArea();
                 editorialController = new EditorialController(pr);
                 editorialController.cargarCboEditorial();
+                paiscontroller = new AddPaisController(pr);
+                paiscontroller.cargarTxtPaises();
+
                 try {
                     librocontroller = new LibroController(pr, cr, ac, id);
                     librocontroller.cargarLibros(pr.tbLibros);
                     librocontroller.enabledBtnPaginator();
+                    librocontroller.enableControls(false);
                 } catch (NoSuchFieldException | IOException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 lg.dispose();
-            } 
-            if (id==2) {               
+            }
+            if (id == 2) {
                 pr.setLocationRelativeTo(null);
                 pr.setVisible(true);
                 pr.txttitulo.requestFocus();
@@ -178,8 +192,8 @@ public final class LoginController implements ActionListener, KeyListener {
     public void keyTyped(KeyEvent e) {
         if (e.getSource() == lg.txtPass) {
             char tecla = e.getKeyChar();
-            if (tecla == KeyEvent.VK_ENTER) {              
-                    lg.btnIngresar.doClick();                
+            if (tecla == KeyEvent.VK_ENTER) {
+                lg.btnIngresar.doClick();
             }
         }
     }

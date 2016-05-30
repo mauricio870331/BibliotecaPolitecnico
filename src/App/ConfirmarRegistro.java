@@ -71,10 +71,10 @@ public class ConfirmarRegistro extends javax.swing.JDialog {
                 chkImportanteActionPerformed(evt);
             }
         });
-        getContentPane().add(chkImportante, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, -1, -1));
+        getContentPane().add(chkImportante, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, -1, -1));
 
         btnConfirm.setText("confirmar");
-        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 430, -1, -1));
+        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, -1, -1));
 
         jLabel1.setText("Titulo:");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
@@ -84,7 +84,7 @@ public class ConfirmarRegistro extends javax.swing.JDialog {
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblTitulo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblTitulo.setOpaque(true);
-        getContentPane().add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 30, 300, 20));
+        getContentPane().add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 300, 20));
 
         jLabel2.setText("Autor:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 55, -1, -1));
@@ -94,7 +94,7 @@ public class ConfirmarRegistro extends javax.swing.JDialog {
         lblAutor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblAutor.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblAutor.setOpaque(true);
-        getContentPane().add(lblAutor, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 55, 300, 20));
+        getContentPane().add(lblAutor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 55, 300, 20));
 
         jLabel3.setText("Area:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
@@ -104,7 +104,7 @@ public class ConfirmarRegistro extends javax.swing.JDialog {
         lblArea.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblArea.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblArea.setOpaque(true);
-        getContentPane().add(lblArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 80, 300, 20));
+        getContentPane().add(lblArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 300, 20));
 
         jLabel4.setText("Editorial");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 105, -1, -1));
@@ -114,89 +114,89 @@ public class ConfirmarRegistro extends javax.swing.JDialog {
         lblEditorial.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblEditorial.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblEditorial.setOpaque(true);
-        getContentPane().add(lblEditorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 105, 300, 20));
+        getContentPane().add(lblEditorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 105, 300, 20));
 
         lbltipolibro.setBackground(new java.awt.Color(255, 255, 255));
         lbltipolibro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lbltipolibro.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbltipolibro.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lbltipolibro.setOpaque(true);
-        getContentPane().add(lbltipolibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 290, 300, 20));
+        getContentPane().add(lbltipolibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 300, 20));
 
         jLabel5.setText("Tipo libro:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
 
         jLabel6.setText("Comentarios:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 305, -1, -1));
 
         lblComentarios.setBackground(new java.awt.Color(255, 255, 255));
         lblComentarios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblComentarios.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblComentarios.setOpaque(true);
-        getContentPane().add(lblComentarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, 300, 80));
+        getContentPane().add(lblComentarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 305, 300, 80));
 
         lblPaginas.setBackground(new java.awt.Color(255, 255, 255));
         lblPaginas.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblPaginas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblPaginas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblPaginas.setOpaque(true);
-        getContentPane().add(lblPaginas, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 300, 20));
+        getContentPane().add(lblPaginas, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, 300, 20));
 
         jLabel7.setText("Paginas:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
         jLabel8.setText("Tipo Pasta:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 255, -1, -1));
 
         lblTipoPasta.setBackground(new java.awt.Color(255, 255, 255));
         lblTipoPasta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblTipoPasta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblTipoPasta.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblTipoPasta.setOpaque(true);
-        getContentPane().add(lblTipoPasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 300, 20));
+        getContentPane().add(lblTipoPasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 255, 300, 20));
 
         lblFecha.setBackground(new java.awt.Color(255, 255, 255));
         lblFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblFecha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblFecha.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblFecha.setOpaque(true);
-        getContentPane().add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 300, 20));
+        getContentPane().add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 155, 300, 20));
 
         jLabel9.setText("Fecha de Compra:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 155, -1, -1));
 
         lblPais.setBackground(new java.awt.Color(255, 255, 255));
         lblPais.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblPais.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblPais.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblPais.setOpaque(true);
-        getContentPane().add(lblPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 130, 300, 20));
+        getContentPane().add(lblPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 300, 20));
 
         jLabel10.setText("Pais:");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         lblPrecio.setBackground(new java.awt.Color(255, 255, 255));
         lblPrecio.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblPrecio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblPrecio.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblPrecio.setOpaque(true);
-        getContentPane().add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 300, 20));
+        getContentPane().add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 300, 20));
 
         jLabel11.setText("Edicion:");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 205, -1, -1));
 
         lblEdicion.setBackground(new java.awt.Color(255, 255, 255));
         lblEdicion.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblEdicion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblEdicion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         lblEdicion.setOpaque(true);
-        getContentPane().add(lblEdicion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 300, 20));
+        getContentPane().add(lblEdicion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 205, 300, 20));
 
         jLabel13.setText("Precio:");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
         btncancel.setText("Cancelar");
-        getContentPane().add(btncancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, -1, -1));
+        getContentPane().add(btncancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 420, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

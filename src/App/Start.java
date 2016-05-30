@@ -31,7 +31,7 @@ public class Start {
         Login lg = new Login();
         Principal pr = new Principal();
         ConfirmarRegistro cr = new ConfirmarRegistro(null, true);
-        AddComment ac = new AddComment(null, true);
+        AddComment ac = new AddComment(null, true);      
 //        UsersController uc = new UsersController(pr, adminDao, 0, 0);
         LoginController lgController = new LoginController(lg, pr, cr, ac);
         lg.setVisible(true);

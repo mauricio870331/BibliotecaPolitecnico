@@ -27,6 +27,14 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="mnuDetalleLibro">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Detalle"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </MenuItem>
       </SubComponents>
     </Container>
     <Component class="javax.swing.ButtonGroup" name="GroupRol">
@@ -87,7 +95,7 @@
     </Menu>
   </NonVisualComponents>
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -194,6 +202,7 @@
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="btnRegistrar" max="32767" attributes="0"/>
                                       <Component id="btnCancelar" pref="84" max="32767" attributes="0"/>
+                                      <Component id="btnNewLibro" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -212,14 +221,17 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Component id="btnRegistrar" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jPanel2" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="btnNewLibro" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnRegistrar" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -271,6 +283,9 @@
                       </Border>
                     </Property>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
 
                   <Layout>
                     <DimensionLayout dim="0">
@@ -292,20 +307,6 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="cboAutor" max="32767" attributes="2"/>
-                                          <Component id="cboArea" max="32767" attributes="2"/>
-                                          <Component id="cboEditorial" max="32767" attributes="2"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="btnAddArea" max="32767" attributes="0"/>
-                                          <Component id="btnAddAutor" max="32767" attributes="0"/>
-                                          <Component id="btnAddEditorial" alignment="1" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Component id="txtPais" alignment="0" max="32767" attributes="2"/>
                                   <Component id="txttitulo" alignment="0" max="32767" attributes="2"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
@@ -316,8 +317,23 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="btnAddComment" min="-2" pref="59" max="-2" attributes="0"/>
                                   </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="txtPais" alignment="0" max="32767" attributes="2"/>
+                                          <Component id="cboAutor" alignment="0" max="32767" attributes="2"/>
+                                          <Component id="cboArea" alignment="0" max="32767" attributes="2"/>
+                                          <Component id="cboEditorial" alignment="0" max="32767" attributes="2"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="btnAddArea" max="32767" attributes="0"/>
+                                          <Component id="btnAddAutor" max="32767" attributes="0"/>
+                                          <Component id="btnAddEditorial" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="btnSelectCiudad" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="20" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -351,15 +367,16 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtPais" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSelectCiudad" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                   <Component id="yearPublicacion" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnAddComment" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel16" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -478,6 +495,14 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnAddComment">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="+"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="btnSelectCiudad">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="+"/>
                       </Properties>
@@ -688,7 +713,7 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cboTipoPasta" alignment="0" pref="288" max="32767" attributes="0"/>
+                                  <Component id="cboTipoPasta" alignment="0" pref="278" max="32767" attributes="0"/>
                                   <Component id="cboTipoLibro" alignment="1" max="32767" attributes="0"/>
                                   <Component id="txtPrecio" alignment="0" max="32767" attributes="0"/>
                                   <Component id="cldFechaCompra" alignment="1" max="32767" attributes="0"/>
@@ -830,6 +855,14 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JButton" name="btnNewLibro">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Nuevo"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
